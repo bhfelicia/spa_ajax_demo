@@ -33,4 +33,14 @@ router.get("/users/:id/sales", async (req, res, next) => {
   }
 });
 
+router.post("/users/:id/sales", async (req, res, next) => {
+  try {
+    let sale = await Sale.create({ ...req.body, userId: req.params.id });
+    sale = await Sale.findByPk(sale.id, { include: [Car] });
+    res.send(sale);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
